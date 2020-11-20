@@ -1,12 +1,17 @@
-import { pipeWith } from "ramda";
 import { Person } from "./models";
 
 type MaybeJmbg = Person["jmbg"] | Error;
 
-const pipe = pipeWith(((
-  f: (value: Person["jmbg"]) => MaybeJmbg,
-  res: MaybeJmbg
-) => (res instanceof Error ? res : f(res))) as Parameters<typeof pipeWith>[0]);
+type PipeWith = <A, B>(
+  composer: (f: (a: A) => A | B, r: A | B) => A | B
+) => (fs: Array<(a: A) => A | B>) => (a: A | B) => A | B;
+const pipeWith: PipeWith = (composer) => (fs) => (a) =>
+  fs.reduce((r, f) => composer(f, r), a);
+
+const pipe = pipeWith(
+  (f: (value: Person["jmbg"]) => MaybeJmbg, res: MaybeJmbg) =>
+    res instanceof Error ? res : f(res)
+);
 
 export const validateJmbg = (jmbg: Person["jmbg"]): MaybeJmbg => {
   return pipe([
