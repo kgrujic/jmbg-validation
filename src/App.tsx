@@ -1,13 +1,8 @@
-import { Form } from "formik";
 import React from "react";
-import Provider from "./Provider";
+import Form from "./Form";
 
 function App() {
-  return (
-    <Provider>
-      <Form />
-    </Provider>
-  );
+  return <Form />;
 }
 
 export default App;
