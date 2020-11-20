@@ -81,8 +81,9 @@ const Form: React.FC<FormProps> = () => {
               (e) => {
                 onBlur(e);
 
-                validateJmbg((error) => form.setFieldError("jmbg", error))(
-                  e.target.value
+                form.setFieldError(
+                  "jmbg",
+                  validateJmbg(e.target.value)?.message
                 );
               },
               [onBlur]
