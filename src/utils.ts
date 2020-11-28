@@ -27,7 +27,7 @@ export const validateJmbg = (jmbg: Person["jmbg"]): MaybeJmbg => {
       /^\d{13}$/.test(value as Person["jmbg"])
         ? value
         : new Error("JMBG must consist of 13 digits."),
-    (value: Person["jmbg"]) =>
+    (value) =>
       new RegExp(
         `^((${leapYearMonths}[0-9][13579][26])|(${leapYearMonths}[0-9][02468][048])|(${months}[0-9][13579][1345789])|(${months}[0-9][02468][1235679]))`
       ).test(value)
