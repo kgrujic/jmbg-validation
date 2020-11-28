@@ -13,6 +13,28 @@ const pipe = pipeWith(
     res instanceof Error ? res : f(res)
 );
 
+const hasValidControlNumber = (value: Person["jmbg"]) => {
+  //     a  b  v  g  d  dj e  zh z  i  j  k  l
+  const [a, b, c, d, e, f, g, h, i, j, k, l, m] = value.split("").map(Number);
+  const result =
+    11 -
+    ((7 * (a + g) +
+      6 * (b + h) +
+      5 * (c + i) +
+      4 * (d + j) +
+      3 * (e + k) +
+      2 * (f + l)) %
+      11);
+
+  const controlNumber = result > 9 ? 0 : result;
+
+  return m === controlNumber
+    ? value
+    : new Error(
+        `Expected control number to be ${controlNumber} but received ${m}.`
+      );
+};
+
 const d28 = "(0[1-9]|1[0-9]|2[0-8])";
 const d29 = "(0[1-9]|1[0-9]|2[0-9])";
 const d30 = "(0[1-9]|1[0-9]|2[0-9]|30)";
@@ -34,10 +56,11 @@ export const validateJmbg = (jmbg: Person["jmbg"]): MaybeJmbg => {
         ? value
         : new Error("JMBG must consist of 13 digits."),
     (value) =>
-      new RegExp(`^(${years}${region}${index})`).test(value)
+      new RegExp(`^${years}${region}${index}[0-9]$`).test(value)
         ? value
         : new Error(
             "First two digits must represent a valid day in the month."
           ),
+    (value) => hasValidControlNumber(value),
   ])(jmbg);
 };
