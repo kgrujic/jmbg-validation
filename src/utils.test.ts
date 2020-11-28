@@ -7,12 +7,6 @@ describe("validate JMBG", () => {
     expect(validateJmbg(input)).toBeInstanceOf(Error);
     expect(validateJmbg("320569874521")).toBeInstanceOf(Error);
   });
-  test("days", () => {
-    expect(validateJmbg("3234567890123")).toBeInstanceOf(Error);
-    expect(validateJmbg("0034567890123")).toBeInstanceOf(Error);
-    const input = "1203356789012";
-    expect(validateJmbg(input)).toBe(input);
-  });
   test("months", () => {
     expect(validateJmbg("0434567890123")).toBeInstanceOf(Error);
     expect(validateJmbg("1500567890123")).toBeInstanceOf(Error);
