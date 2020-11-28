@@ -23,6 +23,10 @@ const leapYearMonths = `((${d31}01)|(${d29}02)|(${d31}03)|(${d30}04)|(${d31}05)|
 
 const years = `((${leapYearMonths}[0-9][13579][26])|(${leapYearMonths}[0-9][02468][048])|(${months}[0-9][13579][1345789])|(${months}[0-9][02468][1235679]))`;
 
+const region = "((0[1-9])|([2-5][0-9])|([7-9][0-9]))";
+
+const index = "[0-9][0-9][0-9]";
+
 export const validateJmbg = (jmbg: Person["jmbg"]): MaybeJmbg => {
   return pipe([
     (value) =>
@@ -30,7 +34,7 @@ export const validateJmbg = (jmbg: Person["jmbg"]): MaybeJmbg => {
         ? value
         : new Error("JMBG must consist of 13 digits."),
     (value) =>
-      new RegExp(`^(${years}((0[1-9])|([2-5][0-9])|([7-9][0-9])))`).test(value)
+      new RegExp(`^(${years}${region}${index})`).test(value)
         ? value
         : new Error(
             "First two digits must represent a valid day in the month."
