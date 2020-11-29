@@ -55,7 +55,8 @@ const hasValidDate = (value: string): WithDate | Error => {
   }
 };
 
-const region = "(([0-5][0-9])|([7-9][0-9]))";
+const region =
+  "((0[1-57-9])|(1[0-9])|(2[169])|(3[0-9])|(4[2-9])|(50)|(7[1-9])|(8[0-25-9])|(9[1-6]))";
 const hasValidRegion = (withDate: WithDate): WithRegion | Error => {
   const { value } = withDate;
 

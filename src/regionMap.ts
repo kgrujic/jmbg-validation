@@ -1,15 +1,9 @@
-const strancBezDrzavljanstva =
-  "Stranci bez drzavljanstva bivse SFRJ ili njenih naslednica";
-const crnaGora = "Crna Gora";
-
 const regionMap = {
-  "00": strancBezDrzavljanstva,
   "01": "Stranci u BiH",
   "02": "Stranci u Crnog Gori",
   "03": "Stranci u Hrvatskoj",
   "04": "Stranci u Makedoniji",
   "05": "Stranci u Sloveniji",
-  "06": strancBezDrzavljanstva,
   "07": "Stranci u Srbiji bez pokrajina",
   "08": "Stranci u Vojvodini",
   "09": "Stranci na Kosovu i metohiji",
@@ -25,15 +19,8 @@ const regionMap = {
   "18": "Tuzla",
   "19": "Zenica",
 
-  "20": crnaGora,
   "21": "Podgorica",
-  "22": crnaGora,
-  "23": crnaGora,
-  "24": crnaGora,
-  "25": crnaGora,
   "26": "Niksic",
-  "27": crnaGora,
-  "28": crnaGora,
   "29": "Pljevlja",
 
   "30": "Osijek, Slavonija region",
@@ -47,7 +34,6 @@ const regionMap = {
   "38": "Split, Zadar, Dubrovnik, Dalmacija region",
   "39": "ostalo",
 
-  "40": "Makedonija",
   "41": "Bitola",
   "42": "Kumanovo",
   "43": "Ohrid",
@@ -59,17 +45,7 @@ const regionMap = {
   "49": "Štip",
 
   "50": "Slovenija",
-  "51": "Slovenija",
-  "52": "Slovenija",
-  "53": "Slovenija",
-  "54": "Slovenija",
-  "55": "Slovenija",
-  "56": "Slovenija",
-  "57": "Slovenija",
-  "58": "Slovenija",
-  "59": "Slovenija",
 
-  "70": "Centralna Srbija",
   "71": "Beograd region",
   "72": "Šumadija",
   "73": "Niš region",
@@ -83,24 +59,18 @@ const regionMap = {
   "80": "Novi Sad region",
   "81": "Sombor region",
   "82": "Subotica region",
-  "83": "Autonomna Pokrajina Vojvodina",
-  "84": "Autonomna Pokrajina Vojvodina",
   "85": "Zrenjanin region",
   "86": "Pančevo region",
   "87": "Kikinda region",
   "88": "Ruma region",
   "89": "Sremska Mitrovica region",
 
-  "90": "Autonomna Pokrajina Kosovo i Metohija",
   "91": "Priština region",
   "92": "Kosovska Mitrovica region",
   "93": "Peć region",
   "94": "Đakovica region",
   "95": "Prizren region",
   "96": "Kosovsko Pomoravski okrug",
-  "97": "Autonomna Pokrajina Kosovo i Metohija",
-  "98": "Autonomna Pokrajina Kosovo i Metohija",
-  "99": "Autonomna Pokrajina Kosovo i Metohija",
 };
 
 export default regionMap;
