@@ -2,11 +2,9 @@ import { Person } from "./models";
 
 type MaybeJmbg = Person["jmbg"] | Error;
 
-type PipeWith = <A, B>(
-  composer: (f: (a: A) => A | B, r: A | B) => A | B
-) => (fs: Array<(a: A) => A | B>) => (a: A | B) => A | B;
-const pipeWith: PipeWith = (composer) => (fs) => (a) =>
-  fs.reduce((r, f) => composer(f, r), a);
+const pipeWith = <A, B>(composer: (f: (a: A) => A | B, r: A | B) => A | B) => (
+  fs: Array<(a: A) => A | B>
+) => (a: A): A | B => fs.reduce((r, f) => composer(f, r), a as A | B);
 
 const pipeWithError = pipeWith(
   (f: (value: Person["jmbg"]) => MaybeJmbg, res: MaybeJmbg) =>
