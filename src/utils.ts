@@ -27,7 +27,9 @@ const hasValidLength = (value: Person["jmbg"]) =>
 const hasValidDate = (value: Person["jmbg"]) =>
   new RegExp(`^${years}......$`).test(value)
     ? value
-    : new Error("The first 7 digits must represent a valid date.");
+    : new Error(
+        "The first 7 digits must represent a valid date in the following format: DDMMYYY"
+      );
 
 const region = "((0[1-9])|([2-5][0-9])|([7-9][0-9]))";
 const hasValidRegion = (value: Person["jmbg"]) => {
