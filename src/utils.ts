@@ -101,9 +101,7 @@ const hasValidControlNumber = (withUniqueId: WithUniqueId): Jmbg | Error => {
 
   return m === controlNumber
     ? { ...withUniqueId, controlNumber }
-    : new Error(
-        `Expected control number to be ${controlNumber} but received ${m}.`
-      );
+    : new Error(`Invalid control number.`);
 };
 
 export const validateJmbg = $(
