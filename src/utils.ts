@@ -8,7 +8,7 @@ type PipeWith = <A, B>(
 const pipeWith: PipeWith = (composer) => (fs) => (a) =>
   fs.reduce((r, f) => composer(f, r), a);
 
-const pipe = pipeWith(
+const pipeWithError = pipeWith(
   (f: (value: Person["jmbg"]) => MaybeJmbg, res: MaybeJmbg) =>
     res instanceof Error ? res : f(res)
 );
@@ -57,7 +57,7 @@ const region = "((0[1-9])|([2-5][0-9])|([7-9][0-9]))";
 
 const index = "[0-9][0-9][0-9]";
 
-export const validateJmbg = pipe([
+export const validateJmbg = pipeWithError([
   hasValidLength,
   hasValidDate,
   hasValidControlNumber,
