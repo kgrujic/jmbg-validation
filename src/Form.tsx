@@ -7,7 +7,7 @@ import {
   Input,
   useColorMode,
 } from "@chakra-ui/react";
-import { useFormik } from "formik";
+import { FormikErrors, useFormik } from "formik";
 import React from "react";
 import * as yup from "yup";
 import { Person } from "./models";
@@ -31,20 +31,44 @@ const Form: React.FC<FormProps> = () => {
   const { toggleColorMode } = useColorMode();
   React.useEffect(() => {
     toggleColorMode();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const form = useFormik(
-    React.useMemo(
-      () => ({
-        initialValues,
-        validationSchema,
-        onSubmit: console.log,
-      }),
-      []
-    )
-  );
+  const form = useFormik({
+    initialValues,
+    onSubmit: ({ jmbg, ...values }: Person) => {
+      console.table({ ...values, jmbg: validateJmbg(jmbg) });
+    },
+    validate: (person): Promise<FormikErrors<Person>> => {
+      return Promise.allSettled(
+        Object.keys(person).map((key) => {
+          return validationSchema.validateAt(key, person).then(() => key);
+        })
+      ).then((results) => {
+        const errors = Object.fromEntries(
+          results
+            .filter(
+              (result): result is PromiseRejectedResult =>
+                result.status === "rejected"
+            )
+            .map((result) => {
+              const error: yup.ValidationError = result.reason;
+              return [error.path, error.errors[0]];
+            })
+        );
+        if (errors.jmbg) {
+          return errors;
+        } else {
+          const error = validateJmbg(person.jmbg);
+          if (error instanceof Error) {
+            return { ...errors, jmbg: error.message };
+          } else {
+            return errors;
+          }
+        }
+      });
+    },
+  });
 
-  const { onBlur, ...jmbgProps } = form.getFieldProps("jmbg");
   return (
     <Container height="100%" display="grid" alignItems="center">
       <form onSubmit={form.handleSubmit}>
@@ -76,25 +100,12 @@ const Form: React.FC<FormProps> = () => {
           <FormLabel>JMBG</FormLabel>
           <Input
             type="text"
-            {...jmbgProps}
-            onBlur={React.useCallback(
-              (e) => {
-                onBlur(e);
-
-                form.setFieldError(
-                  "jmbg",
-                  validateJmbg(e.target.value)?.message
-                );
-              },
-              [onBlur]
-            )}
+            {...form.getFieldProps("jmbg")}
             placeholder="1234567890123"
           />
           <FormErrorMessage>{form.errors.jmbg}</FormErrorMessage>
         </FormControl>
-        <Button type="submit" onClick={form.submitForm}>
-          Submit
-        </Button>
+        <Button onClick={form.submitForm}>Submit</Button>
       </form>
     </Container>
   );
