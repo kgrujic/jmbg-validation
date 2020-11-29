@@ -23,13 +23,11 @@ const years = `((${leapYearMonths}[0-9][13579][26])|(${leapYearMonths}[0-9][0246
 
 const region = "((0[1-9])|([2-5][0-9])|([7-9][0-9]))";
 
-const index = "[0-9][0-9][0-9]";
-
 const hasValidLength = (value: Person["jmbg"]) =>
   /^\d{13}$/.test(value) ? value : new Error("JMBG must consist of 13 digits.");
 
-const hasValidDateAndIndex = (value: Person["jmbg"]) =>
-  new RegExp(`^${years}${region}${index}[0-9]$`).test(value)
+const hasValidDate = (value: Person["jmbg"]) =>
+  new RegExp(`^${years}${region}[0-9][0-9][0-9][0-9]$`).test(value)
     ? value
     : new Error("The first 7 digits must represent a valid date.");
 
@@ -57,6 +55,6 @@ const hasValidControlNumber = (value: Person["jmbg"]) => {
 
 export const validateJmbg = pipeWithError([
   hasValidLength,
-  hasValidDateAndIndex,
+  hasValidDate,
   hasValidControlNumber,
 ]);
