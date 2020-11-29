@@ -2,10 +2,10 @@ import { Person } from "./models";
 
 type MaybeJmbg = Person["jmbg"] | Error;
 
-const pipeWith = <A, B>(composer: (f: (a: A) => A | B, r: A | B) => A | B) => (
-  fs: Array<(a: A) => A | B>
-) => (a: A): A | B => fs.reduce((r, f) => composer(f, r), a as A | B);
-
+const pipeWith = <C, B, D>(
+  composer: (f: (b: B) => C | D, r: B | D) => C | D
+) => <A>(f: (a: A) => B | D) => (g: (b: B) => C | D) => (a: A): C | D =>
+  composer(g, f(a));
 const pipeWithError = pipeWith(
   (f: (value: Person["jmbg"]) => MaybeJmbg, res: MaybeJmbg) =>
     res instanceof Error ? res : f(res)
@@ -60,9 +60,8 @@ const hasValidControlNumber = (value: Person["jmbg"]) => {
       );
 };
 
-export const validateJmbg = pipeWithError([
-  hasValidLength,
-  hasValidDate,
-  hasValidRegion,
-  hasValidControlNumber,
-]);
+export const validateJmbg = pipeWithError(hasValidLength)(
+  pipeWithError(hasValidDate)(
+    pipeWithError(hasValidRegion)(hasValidControlNumber)
+  )
+);
