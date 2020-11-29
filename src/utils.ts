@@ -21,15 +21,20 @@ const leapYearMonths = `((${d31}01)|(${d29}02)|(${d31}03)|(${d30}04)|(${d31}05)|
 
 const years = `((${leapYearMonths}[0-9][13579][26])|(${leapYearMonths}[0-9][02468][048])|(${months}[0-9][13579][1345789])|(${months}[0-9][02468][1235679]))`;
 
-const region = "((0[1-9])|([2-5][0-9])|([7-9][0-9]))";
-
 const hasValidLength = (value: Person["jmbg"]) =>
   /^\d{13}$/.test(value) ? value : new Error("JMBG must consist of 13 digits.");
 
 const hasValidDate = (value: Person["jmbg"]) =>
-  new RegExp(`^${years}${region}[0-9][0-9][0-9][0-9]$`).test(value)
+  new RegExp(`^${years}......$`).test(value)
     ? value
     : new Error("The first 7 digits must represent a valid date.");
+
+const region = "((0[1-9])|([2-5][0-9])|([7-9][0-9]))";
+const hasValidRegion = (value: Person["jmbg"]) => {
+  return new RegExp(`^.......${region}....$`).test(value)
+    ? value
+    : new Error("Invalid region code.");
+};
 
 const hasValidControlNumber = (value: Person["jmbg"]) => {
   //     a  b  v  g  d  dj e  zh z  i  j  k  l
@@ -56,5 +61,6 @@ const hasValidControlNumber = (value: Person["jmbg"]) => {
 export const validateJmbg = pipeWithError([
   hasValidLength,
   hasValidDate,
+  hasValidRegion,
   hasValidControlNumber,
 ]);
