@@ -11,7 +11,7 @@ import { FormikErrors, useFormik } from "formik";
 import React from "react";
 import * as yup from "yup";
 import { Person } from "./models";
-import { validateJmbg } from "./utils";
+import { Jmbg, validateJmbg } from "./utils";
 
 export interface FormProps {}
 
@@ -35,9 +35,7 @@ const Form: React.FC<FormProps> = () => {
 
   const form = useFormik({
     initialValues,
-    onSubmit: ({ jmbg, ...values }: Person) => {
-      console.table({ ...values, jmbg: validateJmbg(jmbg) });
-    },
+    onSubmit: console.log,
     validate: (person): Promise<FormikErrors<Person>> => {
       return Promise.allSettled(
         Object.keys(person).map((key) => {
@@ -68,6 +66,16 @@ const Form: React.FC<FormProps> = () => {
       });
     },
   });
+
+  const jmbg: Jmbg | null = React.useMemo(() => {
+    if (form.submitCount > 0 && form.isValid) {
+      const jmbgOrError = validateJmbg(form.values.jmbg);
+
+      return jmbgOrError instanceof Error ? null : jmbgOrError;
+    } else {
+      return null;
+    }
+  }, [form.values.jmbg, form.submitCount, form.isValid]);
 
   return (
     <Container height="100%" display="grid" alignItems="center">
@@ -107,6 +115,7 @@ const Form: React.FC<FormProps> = () => {
         </FormControl>
         <Button onClick={form.submitForm}>Submit</Button>
       </form>
+      {jmbg && <pre>{JSON.stringify(jmbg, null, 2)}</pre>}
     </Container>
   );
 };

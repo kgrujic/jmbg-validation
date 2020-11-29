@@ -32,7 +32,7 @@ interface WithUniqueId extends WithRegion {
   uniqueId: { sex: "female" | "male"; index: number };
 }
 
-type Jmbg = WithUniqueId & { controlNumber: number };
+export type Jmbg = WithUniqueId & { controlNumber: number };
 
 const hasValidLength = (value: string): string | Error =>
   /^\d{13}$/.test(value) ? value : new Error("JMBG must consist of 13 digits.");
@@ -73,11 +73,13 @@ const hasValidRegion = (withDate: WithDate): WithRegion | Error => {
 const hasUniqueId = (withRegion: WithRegion): WithUniqueId | Error => {
   const { value } = withRegion;
   const [, uid2, uid1, uid] = value.split("").reverse();
+  const isFemale = Number(uid) > 4;
+  const index = Number(`${uid}${uid1}${uid2}`);
   return {
     ...withRegion,
     uniqueId: {
-      sex: Number(uid) > 4 ? "female" : "male",
-      index: Number(`${uid}${uid1}${uid2}`),
+      sex: isFemale ? "female" : "male",
+      index: isFemale ? index - 500 : index,
     },
   };
 };
